@@ -1,0 +1,89 @@
+DAY - 2
+
+what is difference between File Management System(FMS) and Database Management System(DBMS)
+-------------------------------------------------------------------------------------------------------------------------
+
+High data redundancy(duplicate data)
+Reduce data redundancy
+Difficult to maintain and update
+Easy to maintain and update
+Security is limited
+Provides strong security mechanism
+Data sharing is difficult
+Multiple users can share data simultaneously
+No relationship between files
+Supports relationship between tables
+Back and recovery is difficult
+Provide backup and recovery
+Suitable for small applications
+	Suitable for small, medium and large applications
+
+what is difference between File Management System(FMS) and Database Management System(DBMS)
+-------------------------------------------------------------------------------------------------------------------------
+A file system stores data in separate files may lead to data redundancy and security issues. A DBMS stores data is STRUCTURED MANNER using TABLES and  reduces redundancy, provides security, supports multiple users, and ensures data consistency and integrity
+
+What is data, field, record, database..??
+-------------------------------------------------
+What is data...???
+----------------------
+Raw facts or figures without context
+Example :- 376, Meghana, 90000, VZG
+
+What is field...???
+----------------------
+Smallest unit of data in database(column/attribute)
+Example :- empid, empname, empsalary...
+
+What is record...???
+----------------------
+Collection of related field(row/tuple)
+Example :- [376, Meghana, 90000, VZG]
+
+What is database...???
+--------------------------
+Organized collection of related records stored together
+Example :- In employee database it contains details of all employees
+
+What is DBMS...???
+-------------------------
+A DBMS is a software used to create, store, retrieve, update and manage database
+
+
+Client-Server Architecture
+=======================
+In Client-Server Architecture they have 3 components such as:
+Client
+Server
+Protocol
+
+Client :- Role of client in Client-Server Architecture is to send request to the  server and get the response from server.
+Server :- Role of server in Client-Server Architecture is to take request from the client and if the request is valid then it will generate some response we can handover to client. If the client request is not valid the it will rise error.
+Protocol :- Protocol is set of rules and regulations, the role of protocol Client-Server Architecture is to send request from client to server.
+
+Data Models in DBMS
+---------------------------
+Def :- A Data Model defines how data is stored, organized and manipulated
+
+Physical Data Model
+-------------------------------
+Def :- Describes how data is physically stored in storage devices
+Audience : Database Administrators
+
+2.   Logical Data Model
+---------------------------
+Defines the structure of data(Entities, Attribute, Relationships) independent of physical storage areas.
+Audience :- developers and database architectures
+Hierarchical Data Model
+--------------------------------
+Data is represented as a tree structure.(Parent Child Relationship)
+Example :- Company ---> Departments ---> Employees
+Network Data Model
+-----------------------------
+Data is represented as graph with records(nodes) and relationships(edges).
+Example :- Students enrolled in multiple courses, courses taught by multiple professors
+
+5. Relational Data Model(RDBMS)
+-----------------------------------------
+Data is stored in tables(relations) with rows(tuple) and columns(attributes)
+Example :- student(id, name, section, dept_id)
+		  departments(dept_id, dept_name)
