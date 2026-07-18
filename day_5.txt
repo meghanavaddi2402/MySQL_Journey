@@ -1,0 +1,376 @@
+DAY - 5
+
+DML : (Data Manipulation Language):
+----------------------------------------
+insert 
+-------------
+SYNTAX :- insert into table_name (column_name)values(column_values);
+
+
+mysql> use da4;
+Database changed
+mysql> show tables;
++---------------+
+| Tables_in_da4 |
++---------------+
+| codegnan_emp  |
+| company_staff |
++---------------+
+2 rows in set (0.01 sec)
+
+mysql> alter table codegnan_emp rename to employees;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show tables;
++---------------+
+| Tables_in_da4 |
++---------------+
+| company_staff |
+| employees     |
++---------------+
+2 rows in set (0.00 sec)
+
+mysql> desc employees;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| empid     | char(5)     | YES  |     | NULL    |       |
+| firtsname | varchar(25) | YES  |     | NULL    |       |
+| lastname  | varchar(30) | YES  |     | NULL    |       |
+| age       | int         | YES  |     | NULL    |       |
+| doj       | date        | YES  |     | NULL    |       |
+| address   | tinytext    | YES  |     | NULL    |       |
+| dept      | varchar(50) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+7 rows in set (0.01 sec)
+
+mysql> insert into employees(empid,firstname,lastname,age,doj,address,dept)values
+    -> ('E0001','Meghana','vaddi',34,'2026-04-24','VZG','python');
+ERROR 1054 (42S22): Unknown column 'firstname' in 'field list'
+mysql> insert into employees(empid,firstname,lastname,age,doj,address,dept)values
+    -> ('E0001','Meghana','vaddi',34,'2026-04-24','VZG','python');
+ERROR 1054 (42S22): Unknown column 'firstname' in 'field list'
+mysql> insert into employees(empid,firtsname,lastname,age,doj,address,dept)values
+    -> ('E0001','Meghana','vaddi',34,'2026-04-24','VZG','python');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------+
+| empid | firtsname | lastname | age  | doj        | address | dept   |
++-------+-----------+----------+------+------------+---------+--------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | python |
++-------+-----------+----------+------+------------+---------+--------+
+1 row in set (0.00 sec)
+
+mysql> insert into employees(empid,firtsname,lastname,age,doj,address,dept)values
+    -> ('E0002','Vikram','Adithya',37,'2024-06-24','HYD','java'),
+    -> ('E0003','Venkat','Rao',57,'2019-09-31','DEL','sales');
+ERROR 1292 (22007): Incorrect date value: '2019-09-31' for column 'doj' at row 2
+mysql> insert into employees(empid,firtsname,lastname,age,doj,address,dept)values
+    -> ('E0002','Vikram','Adithya',37,'2024-06-24','HYD','java'),
+    -> ('E0003','Venkat','Rao',57,'2019-09-13','DEL','sales');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------+
+| empid | firtsname | lastname | age  | doj        | address | dept   |
++-------+-----------+----------+------+------------+---------+--------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | python |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | java   |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales  |
++-------+-----------+----------+------+------------+---------+--------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE employees
+    -> CHANGE firtsname firstname VARCHAR(25);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into employees(firstname,lastname,age,address,dept,empid,doj)
+    -> values('Ravi','Kumar',45,'HYD','Data Analyst','E0004','2019-08-10');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | python       |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | java         |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales        |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
++-------+-----------+----------+------+------------+---------+--------------+
+4 rows in set (0.00 sec)
+
+mysql> insert into employees values('E0005','Krishna','Tulsi',42,'2015-04-02','CHENNAI','developer');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | python       |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | java         |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales        |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Tulsi    |   42 | 2015-04-02 | CHENNAI | developer    |
++-------+-----------+----------+------+------------+---------+--------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into employees
+    -> values
+    -> ('E0006','Radha','Rani',37,'2021-02-13','BNG','HR'),
+    -> ('E0006','Sai','Gupta',49,'2011-11-24','KOl','Manager');
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | python       |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | java         |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales        |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Tulsi    |   42 | 2015-04-02 | CHENNAI | developer    |
+| E0006 | Radha     | Rani     |   37 | 2021-02-13 | BNG     | HR           |
+| E0006 | Sai       | Gupta    |   49 | 2011-11-24 | KOl     | Manager      |
++-------+-----------+----------+------+------------+---------+--------------+
+7 rows in set (0.00 sec)
+
+mysql> insert into employees(empid,firstname,doj,dept)
+    -> values('E0008','Rahul','2022-01-31,'Marketing');
+    '> ^C
+mysql> insert into employees(empid,firstname,doj,dept)
+    -> values('E0008','Rahul','2022-01-31,'Marketing');
+    '> ^C
+mysql> insert into employees(empid,firstname,doj,dept)
+    -> values('E0008','Rahul','2022-01-31','Marketing');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | python       |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | java         |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales        |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Tulsi    |   42 | 2015-04-02 | CHENNAI | developer    |
+| E0006 | Radha     | Rani     |   37 | 2021-02-13 | BNG     | HR           |
+| E0006 | Sai       | Gupta    |   49 | 2011-11-24 | KOl     | Manager      |
+| E0008 | Rahul     | NULL     | NULL | 2022-01-31 | NULL    | Marketing    |
++-------+-----------+----------+------+------------+---------+--------------+
+8 rows in set (0.00 sec)
+
+mysql> inser into employees set
+    -> empid = 'E0009',
+    -> firstname = 'Charan',
+    -> lastname = 'Krishna',
+    -> age = 25,
+    -> doj = '2025-07-09',
+    -> address = 'VZG',
+    -> dept = 'Back-end';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'inser into employees set
+empid = 'E0009',
+firstname = 'Charan',
+lastname = 'Kris' at line 1
+mysql> insert into employees set
+    -> empid = 'E0009',
+    -> firstname = 'Charan',
+    -> lastname = 'Krishna',
+    -> age = 25,
+    -> doj = '2025-07-09',
+    -> address = 'VZG',
+    -> dept = 'Back-end';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | python       |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | java         |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales        |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Tulsi    |   42 | 2015-04-02 | CHENNAI | developer    |
+| E0006 | Radha     | Rani     |   37 | 2021-02-13 | BNG     | HR           |
+| E0006 | Sai       | Gupta    |   49 | 2011-11-24 | KOl     | Manager      |
+| E0008 | Rahul     | NULL     | NULL | 2022-01-31 | NULL    | Marketing    |
+| E0009 | Charan    | Krishna  |   25 | 2025-07-09 | VZG     | Back-end     |
++-------+-----------+----------+------+------------+---------+--------------+
+9 rows in set (0.00 sec)
+
+2. update
+------------
+SYNTAX :- update table_name set column_name = update_value where some condition;
+mysql> update set empid = 'E0007' where empid = 'E0006' and firstname = 'sai';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'set empid = 'E0007' where empid = 'E0006' and firstname = 'sai'' at line 1
+mysql> update set empid = 'E0007' where empid = 'E0006' and lastname = 'Gupta';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'set empid = 'E0007' where empid = 'E0006' and lastname = 'Gupta'' at line 1
+mysql> update employees set empid = 'E0007' where empid = 'E0006' and lastname = 'Gupta';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | python       |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | java         |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales        |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Tulsi    |   42 | 2015-04-02 | CHENNAI | developer    |
+| E0006 | Radha     | Rani     |   37 | 2021-02-13 | BNG     | HR           |
+| E0007 | Sai       | Gupta    |   49 | 2011-11-24 | KOl     | Manager      |
+| E0008 | Rahul     | NULL     | NULL | 2022-01-31 | NULL    | Marketing    |
+| E0009 | Charan    | Krishna  |   25 | 2025-07-09 | VZG     | Back-end     |
++-------+-----------+----------+------+------------+---------+--------------+
+9 rows in set (0.00 sec)
+
+mysql> select * from employees where empid='E0007';
++-------+-----------+----------+------+------------+---------+---------+
+| empid | firstname | lastname | age  | doj        | address | dept    |
++-------+-----------+----------+------+------------+---------+---------+
+| E0007 | Sai       | Gupta    |   49 | 2011-11-24 | KOl     | Manager |
++-------+-----------+----------+------+------------+---------+---------+
+1 row in set (0.00 sec)
+
+mysql> update employees set 
+    -> lastname = 'Kumari',
+    -> age = 54,
+    -> doj = '2015-04-14'
+    -> where
+    -> empid = 'E0005';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employees where empid = 'E0005';
++-------+-----------+----------+------+------------+---------+-----------+
+| empid | firstname | lastname | age  | doj        | address | dept      |
++-------+-----------+----------+------+------------+---------+-----------+
+| E0005 | Krishna   | Kumari   |   54 | 2015-04-14 | CHENNAI | developer |
++-------+-----------+----------+------+------------+---------+-----------+
+1 row in set (0.00 sec)
+
+mysql> update employees set
+    -> dept = 'accounts'
+    -> where
+    -> empid = 'E0001';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employees set
+    -> dept = 'finance'
+    -> where
+    -> empid = 'E0002';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employees set
+    -> dept = 'devOP'
+    -> where
+    -> empid = 'E0005';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employees where empid = 'E0005';
++-------+-----------+----------+------+------------+---------+-------+
+| empid | firstname | lastname | age  | doj        | address | dept  |
++-------+-----------+----------+------+------------+---------+-------+
+| E0005 | Krishna   | Kumari   |   54 | 2015-04-14 | CHENNAI | devOP |
++-------+-----------+----------+------+------------+---------+-------+
+1 row in set (0.00 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | accounts     |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | finance      |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales        |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Kumari   |   54 | 2015-04-14 | CHENNAI | devOP        |
+| E0006 | Radha     | Rani     |   37 | 2021-02-13 | BNG     | HR           |
+| E0007 | Sai       | Gupta    |   49 | 2011-11-24 | KOl     | Manager      |
+| E0008 | Rahul     | NULL     | NULL | 2022-01-31 | NULL    | Marketing    |
+| E0009 | Charan    | Krishna  |   25 | 2025-07-09 | VZG     | Back-end     |
++-------+-----------+----------+------+------------+---------+--------------+
+9 rows in set (0.00 sec)
+
+3. delete
+-------------
+SYNTAX :- delete from table_name where condition;
+
+mysql> delete from employees where firstname = 'sai';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | accounts     |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | finance      |
+| E0003 | Venkat    | Rao      |   57 | 2019-09-13 | DEL     | sales        |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Kumari   |   54 | 2015-04-14 | CHENNAI | devOP        |
+| E0006 | Radha     | Rani     |   37 | 2021-02-13 | BNG     | HR           |
+| E0008 | Rahul     | NULL     | NULL | 2022-01-31 | NULL    | Marketing    |
+| E0009 | Charan    | Krishna  |   25 | 2025-07-09 | VZG     | Back-end     |
++-------+-----------+----------+------+------------+---------+--------------+
+8 rows in set (0.00 sec)
+
+mysql> delete from employees where firstname = 'venkat';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | accounts     |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | finance      |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Kumari   |   54 | 2015-04-14 | CHENNAI | devOP        |
+| E0006 | Radha     | Rani     |   37 | 2021-02-13 | BNG     | HR           |
+| E0008 | Rahul     | NULL     | NULL | 2022-01-31 | NULL    | Marketing    |
+| E0009 | Charan    | Krishna  |   25 | 2025-07-09 | VZG     | Back-end     |
++-------+-----------+----------+------+------------+---------+--------------+
+7 rows in set (0.00 sec)
+
+mysql> delete from employees where empid = 'E0008';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employees;
++-------+-----------+----------+------+------------+---------+--------------+
+| empid | firstname | lastname | age  | doj        | address | dept         |
++-------+-----------+----------+------+------------+---------+--------------+
+| E0001 | Meghana   | vaddi    |   34 | 2026-04-24 | VZG     | accounts     |
+| E0002 | Vikram    | Adithya  |   37 | 2024-06-24 | HYD     | finance      |
+| E0004 | Ravi      | Kumar    |   45 | 2019-08-10 | HYD     | Data Analyst |
+| E0005 | Krishna   | Kumari   |   54 | 2015-04-14 | CHENNAI | devOP        |
+| E0006 | Radha     | Rani     |   37 | 2021-02-13 | BNG     | HR           |
+| E0009 | Charan    | Krishna  |   25 | 2025-07-09 | VZG     | Back-end     |
++-------+-----------+----------+------+------------+---------+--------------+
+6 rows in set (0.00 sec)
+
+mysql> truncate table employees;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from employees;
+Empty set (0.01 sec)
+
+mysql> drop table employees;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from employees;
+ERROR 1146 (42S02): Table 'da4.employees' doesn't exist
+mysql> show tables;
++---------------+
+| Tables_in_da4 |
++---------------+
+| company_staff |
++---------------+
+1 row in set (0.01 sec)
+
+mysql> ^C
+mysql> Terminal close -- exit!
