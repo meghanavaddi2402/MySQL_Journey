@@ -1,0 +1,311 @@
+mysql> use da4;
+Database changed
+mysql> create table employees(
+    -> empid int auto_increment primary key,
+    -> name varchar(50),
+    -> department varchar(20));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc employees;
++------------+-------------+------+-----+---------+----------------+
+| Field      | Type        | Null | Key | Default | Extra          |
++------------+-------------+------+-----+---------+----------------+
+| empid      | int         | NO   | PRI | NULL    | auto_increment |
+| name       | varchar(50) | YES  |     | NULL    |                |
+| department | varchar(20) | YES  |     | NULL    |                |
++------------+-------------+------+-----+---------+----------------+
+3 rows in set (0.01 sec)
+
+mysql> insert into employees (name,department) values
+    -> ('Ram','IT'),
+    -> ('Kavya','HR'),
+    -> ('rahul','Manager');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from employees;
++-------+-------+------------+
+| empid | name  | department |
++-------+-------+------------+
+|     1 | Ram   | IT         |
+|     2 | Kavya | HR         |
+|     3 | rahul | Manager    |
++-------+-------+------------+
+3 rows in set (0.00 sec)
+
+mysql> create table backup_employees as select * from employees;
+Query OK, 3 rows affected (0.02 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> show tables;
++------------------+
+| Tables_in_da4    |
++------------------+
+| backup_employees |
+| company_staff    |
+| employees        |
++------------------+
+3 rows in set (0.00 sec)
+
+mysql> desc backup_employees;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| empid      | int         | NO   |     | 0       |       |
+| name       | varchar(50) | YES  |     | NULL    |       |
+| department | varchar(20) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> 
+mysql> select * from backup_employees;
++-------+-------+------------+
+| empid | name  | department |
++-------+-------+------------+
+|     1 | Ram   | IT         |
+|     2 | Kavya | HR         |
+|     3 | rahul | Manager    |
++-------+-------+------------+
+3 rows in set (0.00 sec)
+
+
+mysql> create table products (productid int auto_increment primary key, productname varchar(40), price decimal(10,2), quantity int, totalamount decimal(10,2) generated always as (price*quantity) stored);
+Query OK, 0 rows affected (0.02 sec)
+mysql> desc products;
++-------------+---------------+------+-----+---------+------------------+
+| Field       | Type          | Null | Key | Default | Extra            |
++-------------+---------------+------+-----+---------+------------------+
+| productid   | int           | NO   | PRI | NULL    | auto_increment   |
+| productname | varchar(40)   | YES  |     | NULL    |                  |
+| price       | decimal(10,2) | YES  |     | NULL    |                  |
+| quantity    | int           | YES  |     | NULL    |                  |
+| totalamount | decimal(10,2) | YES  |     | NULL    | STORED GENERATED |
++-------------+---------------+------+-----+---------+------------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into products (productname, price, quantity) value
+    -> ('laptop',1000000,1),
+    -> ('mouse',750,2),
+    -> ('printer',75000,1);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from products;
++-----------+-------------+------------+----------+-------------+
+| productid | productname | price      | quantity | totalamount |
++-----------+-------------+------------+----------+-------------+
+|         1 | laptop      | 1000000.00 |        1 |  1000000.00 |
+|         2 | mouse       |     750.00 |        2 |     1500.00 |
+|         3 | printer     |   75000.00 |        1 |    75000.00 |
++-----------+-------------+------------+----------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> update products set price = 80000 where productid = 3;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from products;
++-----------+-------------+------------+----------+-------------+
+| productid | productname | price      | quantity | totalamount |
++-----------+-------------+------------+----------+-------------+
+|         1 | laptop      | 1000000.00 |        1 |  1000000.00 |
+|         2 | mouse       |     750.00 |        2 |     1500.00 |
+|         3 | printer     |   80000.00 |        1 |    80000.00 |
++-----------+-------------+------------+----------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> create table students(
+    -> s_id int auto_increment primary key,
+    -> s_name varchar(50),
+    -> s_mobile_num varchar(10),
+    -> s_marks int(3)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.04 sec)
+
+mysql> insert into students (s_name,s_mobile_num,s_marks) values
+    -> ('ram','356789923',89),
+    -> ('ravi','2567893013',95),
+    -> ('raju','9806426723',63);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from students;
++------+--------+--------------+---------+
+| s_id | s_name | s_mobile_num | s_marks |
++------+--------+--------------+---------+
+|    1 | ram    | 356789923    |      89 |
+|    2 | ravi   | 2567893013   |      95 |
+|    3 | raju   | 9806426723   |      63 |
++------+--------+--------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> create user maggi_24 identified by '1111';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create user cherry identified by '2222';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> tee C:\Users\Meghana\codegnan\MySQL\class_notes\day_6.txt
+mysql> grant select,insert,update on students to maggi_24;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> grant select,delete on students to cherry;
+Query OK, 0 rows affected (0.01 sec)
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>MySQL -u maggi_24 -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 18
+Server version: 8.0.36 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> ^C
+mysql> use da4;
+Database changed
+mysql> select * from students;
++------+--------+--------------+---------+
+| s_id | s_name | s_mobile_num | s_marks |
++------+--------+--------------+---------+
+|    1 | ram    | 356789923    |      89 |
+|    2 | ravi   | 2567893013   |      95 |
+|    3 | raju   | 9806426723   |      63 |
++------+--------+--------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> insert into students values(4,'rani','9845362730',79);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from students;
++------+--------+--------------+---------+
+| s_id | s_name | s_mobile_num | s_marks |
++------+--------+--------------+---------+
+|    1 | ram    | 356789923    |      89 |
+|    2 | ravi   | 2567893013   |      95 |
+|    3 | raju   | 9806426723   |      63 |
+|    4 | rani   | 9845362730   |      79 |
++------+--------+--------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> update students set s_marks = 64 where s_id=4;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from students;
++------+--------+--------------+---------+
+| s_id | s_name | s_mobile_num | s_marks |
++------+--------+--------------+---------+
+|    1 | ram    | 356789923    |      89 |
+|    2 | ravi   | 2567893013   |      95 |
+|    3 | raju   | 9806426723   |      63 |
+|    4 | rani   | 9845362730   |      64 |
++------+--------+--------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> delete from students where s_id=4;
+ERROR 1142 (42000): DELETE command denied to user 'maggi_24'@'localhost' for table 'students'
+mysql>
+
+C:\Program Files\MySQL\MySQL Server 8.0\bin>MySQL -u cherry -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 19
+Server version: 8.0.36 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2024, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use da4;
+Database changed
+mysql> select * from students;
++------+--------+--------------+---------+
+| s_id | s_name | s_mobile_num | s_marks |
++------+--------+--------------+---------+
+|    1 | ram    | 356789923    |      89 |
+|    2 | ravi   | 2567893013   |      95 |
+|    3 | raju   | 9806426723   |      63 |
+|    4 | rani   | 9845362730   |      64 |
++------+--------+--------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> insert into students values(5,'rahul','9352784937',53);
+ERROR 1142 (42000): INSERT command denied to user 'cherry'@'localhost' for table 'students'
+mysql> delete from students where s_id = 4;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from students;
++------+--------+--------------+---------+
+| s_id | s_name | s_mobile_num | s_marks |
++------+--------+--------------+---------+
+|    1 | ram    | 356789923    |      89 |
+|    2 | ravi   | 2567893013   |      95 |
+|    3 | raju   | 9806426723   |      63 |
++------+--------+--------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> update students set s_marks = 78 where s_id=3;
+ERROR 1142 (42000): UPDATE command denied to user 'cherry'@'localhost' for table 'students'
+mysql>
+mysql> revoke insert,update on students from maggi_24;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> revoke delete on students from cherry;
+Query OK, 0 rows affected (0.01 sec)
+
+
+
+user = maggi_24
+
+
+
+mysql> delete from students where s_id=4;
+ERROR 1142 (42000): DELETE command denied to user 'maggi_24'@'localhost' for table 'students'
+mysql> ^C
+mysql> insert into students values(4,'rani','9845362730',79);
+ERROR 1142 (42000): INSERT command denied to user 'maggi_24'@'localhost' for table 'students'
+mysql> select * from students;
++------+--------+--------------+---------+
+| s_id | s_name | s_mobile_num | s_marks |
++------+--------+--------------+---------+
+|    1 | ram    | 356789923    |      89 |
+|    2 | ravi   | 2567893013   |      95 |
+|    3 | raju   | 9806426723   |      63 |
++------+--------+--------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> update students set s_marks = 64 where s_id=4;
+ERROR 1142 (42000): UPDATE command denied to user 'maggi_24'@'localhost' for table 'students'
+mysql>
+
+
+
+USER = cherry
+
+
+mysql> update students set s_marks = 78 where s_id=3;
+ERROR 1142 (42000): UPDATE command denied to user 'cherry'@'localhost' for table 'students'
+mysql> select * from students;
++------+--------+--------------+---------+
+| s_id | s_name | s_mobile_num | s_marks |
++------+--------+--------------+---------+
+|    1 | ram    | 356789923    |      89 |
+|    2 | ravi   | 2567893013   |      95 |
+|    3 | raju   | 9806426723   |      63 |
++------+--------+--------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> delete from students where s_id = 4;
+ERROR 1142 (42000): DELETE command denied to user 'cherry'@'localhost' for table 'students'
+mysql>
+mysql> Terminal close -- exit!
