@@ -1,0 +1,414 @@
+TCL(Transaction Control Language)
+----------------------------------
+def of transaction :- The process of combining all related operations into a single unit and executing them according to teh rule "either all operations should be sucessfuor none is successful", is called transaction.
+
+A transaction is consider a single unit of work and follows the principal "either all or none" 
+EXAMPLE :- Funds Transfer
+
+Consider a money transfer process between two accounts.
+
+1. Debit amount from sender's account.
+2. Credit amount into reciver's account.
+
+Both operations operations should be executed as a single transaction.
+
+If the amount is debited from the sender's account sucessfully, but not credited in the reciver's account fails.It may lead to data inconsistency problems.
+
+They are two types of transactions such as :-
+1. Local Transaction's
+------------------------
+In Local Transaction's all the operations of the transaction are executed in same database.
+EXAMPLE :- Funds transfer from one account to another account where both account's belong to same bank.
+
+2. Global Transaction's
+------------------------
+In Global Transaction's operation's of a transaction are executed on different databases.
+EXAMPLE :- Funds transfer from one account to another account where both account's belong to different bank.
+
+ACID Properties :-
+----------------
+A-ATOMICITY :- Atomicity means a transaction is "all-or-nothing" either all its operations succeed, or none are applied. If any part fails, the entire transaction is rolled back to keep the database consistent.
+
+EXAMPLE :-
+Consider the following transaction T consisting of T1 and T2 : Transfer of $100 from account X to account Y.
+				
+Before: X : 500 | Y : 200
+
+Transaction T
+-----------------------------------------
+T1              | T2
+-----------------------------------------
+Read (X)        | Read (Y)
+X := X - 100    | Y := Y + 100
+Write (X)       | Write (Y)
+-----------------------------------------
+After: X : 400  | Y : 300
+
+
+C-CONSISTENCY :- Consistency in transactions means that the database must remain in a valid state before and after a transaction.
+
+EXAMPLE :-
+Suppose the sum of all balances in a bank system should always be constant. Before a transfer, the total balance is $700. After the transaction, the total balance should remain $700. If the transaction fails in the middle (like updating one account but not the other), the system should maintain its consistency by rolling back the transaction.
+
+Total before T occurs = 500 + 200 = 700 
+Total after T occurs = 400 + 300 = 700 
+
+X = 500 Rs                       | Y = 500 Rs
+-------------------------------------------------
+T                                | T''
+-------------------------------------------------
+Read (X)                         | Read (X)
+X := X * 100                     | Read (Y)
+Write (X)                        | Z := X + Y
+Read (Y)                         | Write (Z)
+Y := Y - 50                      | 
+Write (Y)                        | 
+
+
+I-ISOLATION :- Isolation ensures that transactions run independently without affecting each other. Changes made by one transaction are not visible to others until they are committed.
+
+EXAMPLE :-
+Example: Consider two transactions T and T''.
+
+X = 500, Y = 500
+Explanation:
+
+1. Transaction T:
+T wants to transfer $50 from X to Y.
+T reads Y (value: 500), deducts $50 from X (new X = 450), and adds $50 to Y (new Y = 550).
+2. Transaction T'':
+T'' starts and reads X (500) and Y (500).
+It calculates the sum: 500 + 500 = 1000.
+Meanwhile, values of X and Y change to 450 and 550 respectively.
+So, the correct sum should be 450 + 550 = 1000.
+Isolation ensures that T'' does not read outdated values while another transaction (T) is still in progress.
+Transactions should be independent, and T'' should access the final values only after T commits.
+This avoids inconsistent results, like the incorrect sum calculated by T''.
+
+X = 500 Rs                       | Y = 500 Rs
+-------------------------------------------------
+T                                | T''
+-------------------------------------------------
+Read (X)                         | Read (X)
+X := X - 50                      | Read (Y)
+Write (X)                        | Z := X + Y
+Read (Y)                         | Write (Z)
+Y := Y - 50                      | 
+Write (Y)                        | 
+
+
+D-DURABILITY :- Durability ensures that once a transaction is committed, its changes are permanently saved, even if the system fails. The data is stored in non-volatile memory, so the database can recover to its last committed state without losing data.
+
+TCL Commands
+-------------
+commit
+------
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| au                 |
+| cherry             |
+| da4                |
+| eventmanagement    |
+| ext                |
+| information_schema |
+| internal           |
+| me                 |
+| me1                |
+| mysql              |
+| performance_schema |
+| sample             |
+| sys                |
++--------------------+
+13 rows in set (0.01 sec)
+
+mysql> use da4;
+Database changed
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | Ram     | 50000.00 |
+|     2 | Ramya   | 90000.00 |
++-------+---------+----------+
+2 rows in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update employee set salary = 100000 where empid=2;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee;
++-------+---------+-----------+
+| empid | empname | salary    |
++-------+---------+-----------+
+|     1 | Ram     |  50000.00 |
+|     2 | Ramya   | 100000.00 |
++-------+---------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | Ram     | 50000.00 |
+|     2 | Ramya   | 90000.00 |
++-------+---------+----------+
+2 rows in set (0.00 sec)
+
+mysql> update employee set salary = 90000 where empid=1;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | Ram     | 90000.00 |
+|     2 | Ramya   | 90000.00 |
++-------+---------+----------+
+2 rows in set (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | Ram     | 90000.00 |
+|     2 | Ramya   | 90000.00 |
++-------+---------+----------+
+2 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee values(03,"Rahul",70000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | Ram     | 90000.00 |
+|     2 | Ramya   | 90000.00 |
+|     3 | Rahul   | 70000.00 |
++-------+---------+----------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employee values(04,"Rani",75000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | Ram     | 90000.00 |
+|     2 | Ramya   | 90000.00 |
+|     3 | Rahul   | 70000.00 |
+|     4 | Rani    | 75000.00 |
++-------+---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> savepoint sp1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from employee where empid=2;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | Ram     | 90000.00 |
+|     3 | Rahul   | 70000.00 |
+|     4 | Rani    | 75000.00 |
++-------+---------+----------+
+3 rows in set (0.00 sec)
+
+mysql> rollback to sp1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | Ram     | 90000.00 |
+|     2 | Ramya   | 90000.00 |
+|     3 | Rahul   | 70000.00 |
+|     4 | Rani    | 75000.00 |
++-------+---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> delete from employee where empid=1;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     2 | Ramya   | 90000.00 |
+|     3 | Rahul   | 70000.00 |
+|     4 | Rani    | 75000.00 |
++-------+---------+----------+
+3 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> rollback to sp1;
+ERROR 1305 (42000): SAVEPOINT sp1 does not exist
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| au                 |
+| cherry             |
+| da4                |
+| eventmanagement    |
+| ext                |
+| information_schema |
+| internal           |
+| me                 |
+| me1                |
+| mysql              |
+| performance_schema |
+| sample             |
+| sys                |
++--------------------+
+13 rows in set (0.00 sec)
+
+mysql> drop database au;
+Query OK, 14 rows affected (0.12 sec)
+
+mysql> create database dem;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use dem;
+Database changed
+mysql> create table employee (empid int primary key, ename varchar(50), dept varchar(20));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into employee values (1,"Praneeth","HR"),(2,"sangeetha","developer");
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++-------+-----------+-----------+
+| empid | ename     | dept      |
++-------+-----------+-----------+
+|     1 | Praneeth  | HR        |
+|     2 | sangeetha | developer |
++-------+-----------+-----------+
+2 rows in set (0.00 sec)
+
+
+mysql> lock tables employee write;
+Query OK, 0 rows affected (0.00 sec)
+
+update employee set dept = "accounts" where empid = 2;
+Query OK, 1 row affected (30.89 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+ select * from employee;
++-------+-----------+-----------+
+| empid | ename     | dept      |
++-------+-----------+-----------+
+|     1 | Praneeth  | HR        |
+|     2 | sangeetha | developer |
++-------+-----------+-----------+
+2 rows in set (1 min 5.75 sec)
+
+mysql> unlock tables;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> lock tables employee read;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+-----------+-----------+
+| empid | ename     | dept      |
++-------+-----------+-----------+
+|     1 | Praneeth  | finance   |
+|     2 | sangeetha | developer |
++-------+-----------+-----------+
+2 rows in set (0.00 sec)
+
+
+
+mysql> unlock tables;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee;
++-------+-----------+----------+
+| empid | ename     | dept     |
++-------+-----------+----------+
+|     1 | Praneeth  | finance  |
+|     2 | sangeetha | accounts |
++-------+-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee where empid =2 for update;
++-------+-----------+----------+
+| empid | ename     | dept     |
++-------+-----------+----------+
+|     2 | sangeetha | accounts |
++-------+-----------+----------+
+1 row in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+What is Locking..?
+-------------------
+Locking is a mechanism used by the database to control concurrent data.
+It ensures that multiple users access the same data simultaneously the database maintains consistency, integrity, and prevents conflits.
+
+1.Shared Lock :-
+---------------
+A Shared Lock allows transaction to read data.
+Multiple transactions can hold shared lock on the same row.
+No transaction can be modify the row until all Shared Locks are released.
+
+Characterstics :-
+Read only
+Multiple users can read siultaneousuly
+Blocks update and delete.
+
+2.Exclusive Lock :-
+-------------------
+An Exclusive Lock allows  atransaction to modify data.
+While an Exclusive Lock exists :-
+No other transaction can be read using a locking read or modify that row.
+Only the transaction holding lock can update or delete data.
+
+Characterstics :-
+used fro insert, update and delete.
+Only one Exclusive Lock at a time.
+Block both reads (locking reads) and writes.
+
+3. Intent Lock :-
+-----------------
+An Intent Lock is a table-level lock that indicates a transaction intends to place row-level locks.
+It helps MySQL quickly determine whether a table-level lock conflits with existing row locks.
+Users do not usually create Intent locks manually. InnoDB manages them automatically.
+
+
+Real-Life example: 
+Imagine a library:
+Shared lock: Many students can read the same book at the same time.
+Exclusive lock: One student borrows the book, so nobody else can read or borrow it until it is returned.
+Intent lock: The librarian marks that some is about to read or borrow books from a shelf, helping coordinate access without checking every book individually.
