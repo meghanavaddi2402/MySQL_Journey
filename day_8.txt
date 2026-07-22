@@ -1,0 +1,37 @@
+Constraints
+============
+Constraints are the rules applied to the table columns in MySQL to ensure that only valid and accurate data is stored in the database.
+
+In simple word:
+Constraints are rules that control the data entered into a table.
+
+Why do we use Constraints...??
+--------------------------------
+Maintain data integrity
+Prevent invalid data entry
+Avoid duplicate values
+Ensure relationship between tables
+Make the database reliable and consistent
+
+Constraints Types:-
+-------------------
+Not null :- Doesn't allow null values
+Unique :-  Doesn't allow duplicate values
+Primary key :- Primary is combination of unique and not null
+Composite key
+Foreign key :- A Foreign Key is used to link tables together
+A Foreign key is a field(or collection of fields) in one table that refers to primary key in other table
+- The table containing the Foreign key is called child table and the table containing the candidate key is called as reference table or parent table
+Check
+Default
+
+What are Referential Actions....?
+-----------------------------------
+Referential actions define what happens to child table data when the parent table data is updated or deleted.
+
+Types of Referential Actions :-
+------------------------------------
+1. ON DELETE CASCADE
+2. ON UPDATE CASCADE
+3. ON DELETE SET NULL
+4. ON UPDATE SET NULL
